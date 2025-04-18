@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>assets/alert.png</file>
+        <file>assets/alert.svg</file>
+    </qresource>
+    <qresource prefix="/qml">
+        <file>assets/qml/Main.qml</file>
+        <file>assets/qml/Manometr.qml</file>
+    </qresource>
+</RCC>
