@@ -10,6 +10,9 @@
 #include <QDir>
 #include <QFile>
 
+#include "controlmanometr.h"
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -26,6 +29,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    ControlManometr *manometrCtrl; 
     QTimer *m_updateTimer;
 };
 #endif // MAINWINDOW_H
