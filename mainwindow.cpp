@@ -21,8 +21,15 @@ MainWindow::MainWindow(QWidget *parent)
     // Установить начальную страницу
     ui->stackedWidget->setCurrentIndex(ui->tabWidget->currentIndex());
 
+    // === Создаем объект контроллера давления ===
+    manometrCtrl = new ControlManometr(this); 
+    
     // Манометр
     QQuickWidget *manometerWidget = ui->manometerWidget;
+    // Передаем объект в контекст
+    QQmlContext *context = manometerWidget->rootContext();
+    context->setContextProperty("manometrCtrl", manometrCtrl);
+    
     manometerWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     manometerWidget->setSource(QUrl("qrc:/qml/assets/qml/Manometr.qml"));
     manometerWidget->setClearColor(Qt::transparent); //
