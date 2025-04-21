@@ -1,7 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import QtQuick.Shapes 1.15
 
 Item {
     id: root
@@ -18,58 +17,64 @@ Item {
     signal setTarget(real value)
 
     Rectangle {
-        id: mainPanel
-        width: 250
-        height: 200
+        id: groupBox
+        width: 270
+        height: 230
+        anchors.centerIn: parent
+        radius: 8
+        border.color: "#888"
+        color : "#333333"
+        Rectangle {
+            id: groupTitleBackground
+            width: 140
+            height: 24
+            radius: 2
+            color: "orange"
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.leftMargin: 12
+            anchors.topMargin: -12
+            z: 2
+        // Заголовок, как у QGroupBox
+        Text {
+            id: groupTitle
+            anchors.centerIn: parent
+            text: "Игольчатый кран"
+            color: "white"
+            font.bold: true
+            font.pixelSize: 14
 
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        color: "#333"
-        radius: 10
-        border.color: "#666"
+        }}
 
         Column {
             anchors.fill: parent
-            anchors.margins: 10
-            spacing: 10
-
-            Rectangle {
-                height: 24
-                width: parent.width
-                color: "orange"
-                radius: 2
-                Text {
-                    anchors.centerIn: parent
-                    text: "Игольчатый кран"
-                    color: "black"
-                    font.bold: true
-                }
-            }
+            anchors.margins: 12
+            spacing: 12
+            topPadding: 16
 
             Row {
-                spacing: 10
+                spacing: 12
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                TextField {
-                    id: targetInput
+                Rectangle {
                     width: 80
-                    height: 40
-                    text: root.targetValue.toFixed(2)
-                    validator: DoubleValidator { bottom: 0; top: 100 }
-                    font.pixelSize: 16
-                    horizontalAlignment: TextInput.AlignHCenter
-                    onEditingFinished: {
-                        root.targetValue = parseFloat(text)
-                        root.setTarget(root.targetValue)
-                    }
-                    background: Rectangle {
-                        gradient: LinearGradient {
-                            x1: 0; y1: 1; x2: 0; y2: 0
-                            GradientStop { position: 0.0; color: "#3a3a3a" }
-                            GradientStop { position: 0.88; color: "#656565" }
+                    height: 34
+                    radius: 4
+                    border.color: "#888"
+                    color: "#444"
+
+                    TextField {
+                        id: targetInput
+                        anchors.fill: parent
+                        anchors.margins: 4
+                        text: root.targetValue.toFixed(2)
+                        font.pixelSize: 14
+                        horizontalAlignment: TextInput.AlignHCenter
+                        validator: DoubleValidator { bottom: 0; top: 100 }
+                        onEditingFinished: {
+                            root.targetValue = parseFloat(text)
+                            root.setTarget(root.targetValue)
                         }
-                        radius: 2
-                        border.color: "#999"
                     }
                 }
 
@@ -77,22 +82,22 @@ Item {
                     spacing: 2
                     Text {
                         text: root.currentValue.toFixed(2)
-                        font.pixelSize: 20
+                        font.pixelSize: 18
                         color: "white"
                         horizontalAlignment: Text.AlignHCenter
                     }
                     Text {
                         text: "Положение, %"
                         font.pixelSize: 12
-                        color: "#ccc"
+                        color: "#bbb"
                         horizontalAlignment: Text.AlignHCenter
                     }
                 }
 
                 Rectangle {
-                    width: 8
-                    height: 8
-                    radius: 2
+                    width: 10
+                    height: 10
+                    radius: 5
                     color: root.currentValue > 0 ? "green" : "red"
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -102,38 +107,31 @@ Item {
                 spacing: 6
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                TextField {
-                    id: stepInput
+                Rectangle {
                     width: 60
                     height: 34
-                    text: stepSize.toString()
-                    validator: DoubleValidator { bottom: 0; top: 100 }
-                    font.pixelSize: 14
-                    onEditingFinished: root.stepSize = parseFloat(text)
-                    background: Rectangle {
-                        gradient: LinearGradient {
-                            x1: 0; y1: 1; x2: 0; y2: 0
-                            GradientStop { position: 0.0; color: "#3a3a3a" }
-                            GradientStop { position: 0.88; color: "#656565" }
-                        }
-                        radius: 2
-                        border.color: "#999"
+                    radius: 4
+                    border.color: "#888"
+                    color: "#444"
+
+                    TextField {
+                        id: stepInput
+                        anchors.fill: parent
+                        anchors.margins: 4
+                        text: root.stepSize.toString()
+                        font.pixelSize: 14
+                        validator: DoubleValidator { bottom: 0; top: 100 }
+                        onEditingFinished: root.stepSize = parseFloat(text)
                     }
                 }
 
                 Button {
                     text: "-"
-                    background: Rectangle {
-                           radius: 2
-                       }
                     onClicked: root.decrease()
                 }
 
                 Button {
                     text: "+"
-                    background: Rectangle {
-                           radius: 2
-                       }
                     onClicked: root.increase()
                 }
             }
@@ -141,8 +139,7 @@ Item {
             Text {
                 text: "Шаг"
                 font.pixelSize: 12
-                color: "#ccc"
-                horizontalAlignment: Text.AlignHCenter
+                color: "#bbb"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
@@ -152,17 +149,11 @@ Item {
 
                 Button {
                     text: "Открыть"
-                    background: Rectangle {
-                           radius: 2
-                       }
                     onClicked: root.openValve()
                 }
 
                 Button {
                     text: "Закрыть"
-                    background: Rectangle {
-                           radius: 2
-                       }
                     onClicked: root.closeValve()
                 }
             }
