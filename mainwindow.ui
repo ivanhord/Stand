@@ -12,6 +12,9 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <item>
      <widget class="QFrame" name="headerFrame">
       <property name="sizePolicy">
@@ -26,182 +29,222 @@
       <property name="frameShape">
        <enum>QFrame::Shape::StyledPanel</enum>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QVBoxLayout" name="verticalHeaderLayout">
        <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="alertIconLabel">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>44</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">border-image: url(:/icons/assets/alert.svg) 0 0 0 0 stretch stretch;
-min-width: 60px;
-max-height: 44px;</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QFrame" name="recordFrame">
-         <property name="styleSheet">
-          <string notr="true">background-color: transparent;</string>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::Shape::NoFrame</enum>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QLabel" name="recordIndicator">
-            <property name="styleSheet">
-             <string notr="true">
-            background-color: #00aa00;
-            border: 1px solid #007700;
-            border-radius: 2px;
-            min-width: 16px;
-            max-width: 16px;
-            max-height: 8px;
-          </string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="recordLabel">
-            <property name="styleSheet">
-             <string notr="true">color: white;</string>
-            </property>
-            <property name="text">
-             <string>Запись</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="dateTimeLabel">
-         <property name="styleSheet">
-          <string notr="true">color: white;
-font-size: 14px;
-padding: 0 15px;</string>
-         </property>
-         <property name="text">
-          <string>13:37 04.12.2023</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::TextFormat::RichText</enum>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="menuButton">
-         <property name="styleSheet">
-          <string notr="true">QPushButton {
-    background-color: #444444;
-    color: white;
-    border: 1px solid #555;
-    border-radius: 4px;
-    padding: 6px 12px;
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QTabWidget" name="tabWidget">
+           <property name="layoutDirection">
+            <enum>Qt::LayoutDirection::LeftToRight</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QTabWidget::pane {
+    border: none;
+    background: transparent;
+    height: 0px;
 }
-QPushButton:hover {
-    background-color: #555555;
+QTabBar::tab { 
+	background: rgb(252, 161, 1);
+    color: white; padding: 8px; 
+    border: 1px solid #555; 
+    border-top-left-radius: 4px; 
+    border-top-right-radius: 4px;
+}
+QTabBar::tab:selected { 
+	background: rgb(252, 177, 1); 
+	border-bottom-color: #0078d7; 
 }</string>
-         </property>
-         <property name="text">
-          <string>Меню</string>
-         </property>
-        </widget>
+           </property>
+           <property name="tabPosition">
+            <enum>QTabWidget::TabPosition::North</enum>
+           </property>
+           <property name="tabShape">
+            <enum>QTabWidget::TabShape::Rounded</enum>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <property name="documentMode">
+            <bool>true</bool>
+           </property>
+           <property name="tabsClosable">
+            <bool>false</bool>
+           </property>
+           <property name="movable">
+            <bool>false</bool>
+           </property>
+           <widget class="QWidget" name="tabStand">
+            <attribute name="title">
+             <string>Стенд</string>
+            </attribute>
+           </widget>
+           <widget class="QWidget" name="tabSummary">
+            <attribute name="title">
+             <string>Сводка</string>
+            </attribute>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="alertIconLabel">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>44</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/icons/assets/alert.svg) 0 0 0 0 stretch stretch; min-width: 60px; max-height: 44px;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="recordFrame">
+           <property name="styleSheet">
+            <string notr="true">background-color: transparent;</string>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QLabel" name="recordIndicator">
+              <property name="styleSheet">
+               <string notr="true">background-color: #00aa00; border: 1px solid #007700; border-radius: 2px; min-width: 16px; max-width: 16px; max-height: 8px;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="recordLabel">
+              <property name="styleSheet">
+               <string notr="true">color: white;</string>
+              </property>
+              <property name="text">
+               <string>Запись</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="dateTimeLabel">
+           <property name="styleSheet">
+            <string notr="true">color: white; font-size: 14px; padding: 0 15px;</string>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;13:37&lt;br/&gt;04.12.2023&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::TextFormat::RichText</enum>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="menuButton">
+           <property name="styleSheet">
+            <string notr="true">    QToolButton {
+      background-color:qlineargradient(spread:reflect, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(58, 58, 58, 255), stop:0.882927 rgba(101, 101, 101, 255));
+      color: white;
+      border: none;
+      font-size: 14px;
+    }
+  </string>
+           </property>
+           <property name="text">
+            <string>Меню</string>
+           </property>
+           <property name="icon">
+            <iconset resource="resource.qrc">
+             <normaloff>:/icons/assets/hamburger_menu.svg</normaloff>:/icons/assets/hamburger_menu.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>64</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
     </item>
     <item>
-     <widget class="QFrame" name="mainFrame">
-      <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+      <property name="styleSheet">
+       <string notr="true">background-color: #333333;</string>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QTabWidget" name="tabWidget">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QTabBar::tab {
-    background: #444444;
-    color: white;
-    padding: 8px;
-    border: 1px solid #555;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-}
-QTabBar::tab:selected {
-    background: #555555;
-    border-bottom-color: #0078d7;
-}</string>
-         </property>
-         <property name="currentIndex">
-          <number>0</number>
-         </property>
-         <widget class="QWidget" name="standTab">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+      <widget class="QWidget" name="standPage">
+       <layout class="QHBoxLayout" name="standLayout">
+        <item>
+         <widget class="QQuickWidget" name="manometerWidget">
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>150</height>
+           </size>
           </property>
-          <attribute name="title">
-           <string>Стенд</string>
-          </attribute>
-          <layout class="QVBoxLayout" name="verticalLayout"/>
-         </widget>
-         <widget class="QWidget" name="summaryTab">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+          <property name="styleSheet">
+           <string notr="true">background: transparent;</string>
           </property>
-          <attribute name="title">
-           <string>Сводка</string>
-          </attribute>
          </widget>
-        </widget>
-       </item>
-      </layout>
+        </item>
+        <item>
+         <widget class="QQuickWidget" name="valveWidget">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>120</height>
+           </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background: transparent;</string>
+           </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="summaryPage">
+       <layout class="QVBoxLayout" name="summaryLayout"/>
+      </widget>
      </widget>
     </item>
    </layout>
   </widget>
  </widget>
- <resources/>
+ <customwidgets>
+  <customwidget>
+   <class>QQuickWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">QtQuickWidgets/QQuickWidget</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections/>
 </ui>

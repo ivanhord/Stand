@@ -2,9 +2,11 @@
     <qresource prefix="/icons">
         <file>assets/alert.png</file>
         <file>assets/alert.svg</file>
+        <file>assets/hamburger_menu.svg</file>
     </qresource>
     <qresource prefix="/qml">
         <file>assets/qml/Main.qml</file>
         <file>assets/qml/Manometr.qml</file>
+        <file>assets/qml/NeedleTap.qml</file>
     </qresource>
 </RCC>

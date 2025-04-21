@@ -12,19 +12,27 @@ MainWindow::MainWindow(QWidget *parent)
     // Настройка политик изменения размеров
     ui->centralWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     ui->headerFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    ui->mainFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    ui->stackedWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    // Создание QQuickWidget для отображения QML
-    QQuickWidget *manometerWidget = new QQuickWidget;
+    // Переключение страниц при смене вкладок
+    connect(ui->tabWidget, &QTabWidget::currentChanged, this, [this](int index) {
+        ui->stackedWidget->setCurrentIndex(index);
+    });
+    // Установить начальную страницу
+    ui->stackedWidget->setCurrentIndex(ui->tabWidget->currentIndex());
+
+    // Манометр
+    QQuickWidget *manometerWidget = ui->manometerWidget;
     manometerWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     manometerWidget->setSource(QUrl("qrc:/qml/assets/qml/Manometr.qml"));
     manometerWidget->setClearColor(Qt::transparent); //
+    manometerWidget->setAttribute(Qt::WA_AlwaysStackOnTop);
+    // Игольчатый экран
+    QQuickWidget *valveWidget = ui->valveWidget;
+    valveWidget->setSource(QUrl(QStringLiteral("qrc:/qml/assets/qml/NeedleTap.qml")));
+    valveWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    valveWidget->setClearColor(Qt::transparent);  // Прозрачный фон
 
-    // Вставка в первую вкладку tabWidget
-    QVBoxLayout *layout = qobject_cast<QVBoxLayout *>(ui->standTab->layout());
-    if (layout) {
-        layout->addWidget(manometerWidget);
-    }
 }
 
 

@@ -106,8 +106,10 @@ debug/qrc_resource.cpp: ../../resource.qrc \
 		../../../../Qt/6.9.0/mingw_64/bin/rcc.exe \
 		../../assets/qml/Main.qml \
 		../../assets/qml/Manometr.qml \
+		../../assets/qml/NeedleTap.qml \
 		../../assets/alert.png \
-		../../assets/alert.svg
+		../../assets/alert.svg \
+		../../assets/hamburger_menu.svg
 	D:\Qt\6.9.0\mingw_64\bin\rcc.exe -name resource --no-zstd ..\..\resource.qrc -o debug\qrc_resource.cpp
 
 compiler_moc_predefs_make_all: debug/moc_predefs.h
@@ -393,7 +395,8 @@ compiler_uic_make_all: ui_mainwindow.h
 compiler_uic_clean:
 	-$(DEL_FILE) ui_mainwindow.h
 ui_mainwindow.h: ../../mainwindow.ui \
-		../../../../Qt/6.9.0/mingw_64/bin/uic.exe
+		../../../../Qt/6.9.0/mingw_64/bin/uic.exe \
+		../../../../Qt/6.9.0/mingw_64/include/QtQuickWidgets/QQuickWidget
 	D:\Qt\6.9.0\mingw_64\bin\uic.exe ..\..\mainwindow.ui -o ui_mainwindow.h
 
 compiler_yacc_decl_make_all:

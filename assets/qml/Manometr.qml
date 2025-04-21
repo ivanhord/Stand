@@ -4,11 +4,12 @@ import QtQuick.Layouts 1.15
 import QtQuick.Shapes 1.15
 
 Item {
+    Component.onCompleted: Qt.application.style = "Material"
     id: root
     width: 400
     height: 400
 
-    property real pressure: 516.89
+    property real pressure: 716.89
     property real pMax: 1000
     property real pLimit: 700
     property string unit: "бар"
@@ -96,17 +97,29 @@ Item {
 
         // Надпись сверху
         Text {
+            id: gaugeLabel
             text: "Давление\nнагнетания\nбар"
-            anchors.top: gauge.top
-            anchors.topMargin: 80
             anchors.horizontalCenter: parent.horizontalCenter
-            font.pixelSize: 14
+            width: parent.width * 0.6
+            wrapMode: Text.WordWrap
+            font.pixelSize: Math.max(10, root.width * 0.035)  // адаптивный размер
             color: "white"
             horizontalAlignment: Text.AlignHCenter
-            wrapMode: Text.Wrap
-            padding: 4
-        }
 
+            // Вертикальное размещение между шкалой и кругом
+            Component.onCompleted: updateY()
+            onWidthChanged: updateY()
+            onHeightChanged: updateY()
+            onParentChanged: updateY()
+
+            function updateY() {
+                let r_outer = Math.min(root.width, root.height) / 2 - 30;  // внешний радиус шкалы
+                let r_inner = 60; // радиус центрального круга
+                let mid = (r_outer + r_inner) / 2;
+                let offest = 12;
+                y = root.height / 2 + offest - mid - height / 2;
+            }
+        }
         // Стрелка
         Canvas {
             id: pointer
@@ -172,24 +185,74 @@ Item {
             }
         }
 
-        // Поле ввода Pз
+        // Поле ввода предельного значения
         Row {
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
+            id: limitControl
             spacing: 6
-            Text {
-                text: "Pз:"
-                font.pixelSize: 14
-                color: "white"
-            }
+
+            // Вычисляем позицию по центру нижнего участка дуги
+            property real radius: Math.min(root.width, root.height) / 2 - 40
+            property real angleDeg: (angleStart + angleEnd + 360) / 2 % 360
+            property real angleRad: angleDeg * Math.PI / 180
+
+            x: root.width / 2 + radius * Math.cos(angleRad) - width / 2
+            y: root.height / 2 + radius - height / 2 - 20
+
+
+            // Цвет прямоугольного индикатора слева
+             property color zoneColor: (pressure < pLimit - delta) ? "#aaa" :
+                                       (pressure < pLimit) ? "yellow" : "red"
+
+
+
             TextField {
                 id: limitInput
-                text: pLimit.toString()
+                text: pLimit.toFixed(2)
                 validator: DoubleValidator { bottom: 0; top: pMax }
                 onEditingFinished: pLimit = parseFloat(text)
                 width: 80
+                height: 28
+                font.pixelSize: 14
+                color: "white"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+
+                background: Rectangle {
+                    gradient: LinearGradient {
+                        x1: 0; y1: 1
+                        x2: 0; y2: 0
+                        spread: Gradient.ReflectSpread
+                        GradientStop { position: 0.0; color: "#3A3A3A" }
+                        GradientStop { position: 0.882927; color: "#656565" }
+                    }
+                    radius: 4
+
+
+                    // Индикатор зоны давления
+                    Rectangle {
+                        id: zoneIndicator
+                        width: 10
+                        height: 4
+                        radius: 2
+                        anchors.left: parent.left
+                        anchors.top: parent.top
+                        anchors.margins: 4
+                        color: {
+                            if (pressure < pLimit - delta)
+                                return "#aaa";   // серый
+                            else if (pressure < pLimit)
+                                return "yellow"; // жёлтый
+                            else
+                                return "red";    // красный
+                        }
+                    }
+                }
             }
+
         }
+
+
+
     }
 
     // Автообновление
