@@ -5,11 +5,6 @@ import QtQuick.Layouts 1.15
 Item {
     id: root
     anchors.fill: parent
-    Rectangle {
-           anchors.fill: parent
-           color: "#333333"
-           z: -1 // обязательно, чтобы он был на заднем плане
-       }
 
     property real targetValue: 80
     property real currentValue: 93.81
@@ -75,16 +70,15 @@ Item {
                         GradientStop { position: 0.882927; color: "#656565" }
                     }
 
-                    TextField {
+                    TextInput {
                         id: targetInput
-                        anchors.fill: parent
-                        anchors.margins: 0
+                        width: 80
+                        height: 34
+                        text: root.targetValue.toFixed(2)
                         color: "white"
                         font.pixelSize: 14
                         horizontalAlignment: TextInput.AlignHCenter
                         verticalAlignment: TextInput.AlignVCenter
-                        background: null
-                        text: root.targetValue.toFixed(2)
                         validator: DoubleValidator { bottom: 0; top: 100 }
                         onEditingFinished: {
                             root.targetValue = parseFloat(text)
@@ -100,7 +94,6 @@ Item {
                         font.pixelSize: 18
                         color: "white"
                         horizontalAlignment: Text.AlignHCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
                     }
                     Text {
                         text: "Положение, %"
