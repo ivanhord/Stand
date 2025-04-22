@@ -9,7 +9,11 @@ Item {
     width: 400
     height: 400
 
-    property real pressure: 716.89
+    property real pressure: manometrCtrl.pressure
+    Connections {
+        target: manometrCtrl
+        onPressureChanged: pressure = manometrCtrl.pressure
+    }
     property real pMax: 1000
     property real pLimit: 700
     property string unit: "бар"

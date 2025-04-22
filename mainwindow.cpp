@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QQmlContext>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -22,7 +23,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->setCurrentIndex(ui->tabWidget->currentIndex());
 
     // Манометр
+    manometrCtrl = new ControlManometr(this);
+
     QQuickWidget *manometerWidget = ui->manometerWidget;
+
+    QQmlContext *context = manometerWidget->rootContext();
+    context->setContextProperty("manometrCtrl", manometrCtrl);
+
     manometerWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     manometerWidget->setSource(QUrl("qrc:/qml/assets/qml/Manometr.qml"));
     manometerWidget->setClearColor(Qt::transparent); //
