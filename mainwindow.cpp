@@ -41,7 +41,25 @@ MainWindow::MainWindow(QWidget *parent)
     valveWidget->setClearColor(Qt::transparent);  // Прозрачный фон
 
 }
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
 
+    int w = this->width();
+    int h = this->height();
+
+    // Гибкая адаптация размера шрифта
+    int fontSize = qMax(10, qMin(24, h / 30));
+    QFont font;
+    font.setPointSize(fontSize);
+
+    // Применение к основным элементам
+    ui->tabWidget->setFont(font);
+    ui->recordLabel->setFont(font);
+    ui->dateTimeLabel->setFont(font);
+    ui->menuButton->setFont(font);
+    ui->recordIndicator->setFont(font);
+}
 
 
 
