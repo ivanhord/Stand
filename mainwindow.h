@@ -30,5 +30,8 @@ private:
     Ui::MainWindow *ui;
     ControlManometr *manometrCtrl;
     QTimer *m_updateTimer;
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 };
 #endif // MAINWINDOW_H
