@@ -24,18 +24,22 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Манометр
     // === Создаем объект контроллера давления ===
-    //manometrCtrl = new ControlManometr(this);
-
+    manometrCtrl = new ControlManometr(this);
     QQuickWidget *manometerWidget = ui->manometerWidget;
     // Передаем объект в контекст
-    //QQmlContext *context = manometerWidget->rootContext();
-    //context->setContextProperty("manometrCtrl", manometrCtrl);
+    QQmlContext *contextM = manometerWidget->rootContext();
+    contextM->setContextProperty("manometrCtrl", manometrCtrl);
     manometerWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     manometerWidget->setSource(QUrl("qrc:/qml/assets/qml/Manometr.qml"));
     manometerWidget->setClearColor(Qt::transparent); //
     manometerWidget->setAttribute(Qt::WA_AlwaysStackOnTop);
+
     // Игольчатый экран
+    // === Создаем объект контроллера положения заслонки ===
+    needleTap = new ControlNeedleTap(this);
     QQuickWidget *valveWidget = ui->valveWidget;
+    QQmlContext *contextN = valveWidget->rootContext();
+    contextN->setContextProperty("needleCtrl", needleTap);
     valveWidget->setSource(QUrl(QStringLiteral("qrc:/qml/assets/qml/NeedleTap.qml")));
     valveWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     valveWidget->setClearColor(Qt::transparent);  // Прозрачный фон

@@ -119,8 +119,14 @@ QTabBar::tab:selected {
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
              <widget class="QLabel" name="recordIndicator">
+              <property name="minimumSize">
+               <size>
+                <width>12</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="styleSheet">
-               <string notr="true">background-color: #00aa00; border: 1px solid #007700; border-radius: 2px; min-width: 16px; max-width: 16px; max-height: 8px;</string>
+               <string notr="true">background-color: #00aa00; border: 1px solid #007700; border-radius: 2px; min-width: 10px; max-width: 12px; max-height: 4px;</string>
               </property>
              </widget>
             </item>
@@ -220,10 +226,10 @@ QTabBar::tab:selected {
             <width>120</width>
             <height>120</height>
            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background: transparent;</string>
-           </property>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #333333;</string>
+          </property>
          </widget>
         </item>
        </layout>
