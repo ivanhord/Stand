@@ -2,45 +2,16 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Shapes 1.15
-import "qrc:/qml/assets/qml"
 
 Item {
+    Component.onCompleted: Qt.application.style = "Material"
     id: root
     width: 400
     height: 400
 
-    property real newValue: 0
-    // Подключаем калькулятор
-    Calculator {
-        id: calculator
-        onClosed: {
-            // Обновляем поле ввода при получении значения от калькулятора
-            limitInput.text = newValue.toFixed(2);
-        }
-        onOpened: {
-            // При открытии калькулятора очищаем поле ввода
-            calculator.calculatorInput.text = "";
-        }
-    }
-
-
-    // Импортируем калькулятор
-    property real pressure: manometrCtrl.pressure
-    Connections {
-        target: manometrCtrl
-        function onPressureChanged() {
-            pressure = manometrCtrl.pressure
-        }
-    }
+    property real pressure: 716.89
     property real pMax: 1000
     property real pLimit: 700
-    Connections {
-        target: root
-        function onPLimitChanged() {
-            gauge.requestPaint();
-            pointer.requestPaint();
-        }
-    }
     property string unit: "бар"
 
     readonly property real delta: (pLimit < 500) ? 0.2 * pLimit : 100
@@ -238,21 +209,13 @@ Item {
                 id: limitInput
                 text: pLimit.toFixed(2)
                 validator: DoubleValidator { bottom: 0; top: pMax }
+                onEditingFinished: pLimit = parseFloat(text)
                 width: 80
-                height: 32
+                height: font.pixelSize + 10
                 font.pixelSize: 14
                 color: "white"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-
-                onTextChanged: {
-                    updatePLimitTimer.restart()
-                }
-
-                onEditingFinished: {
-                    // страховка, если пользователь просто нажал Enter
-                    updatePLimitTimer.restart()
-                }
 
                 background: Rectangle {
                     gradient: LinearGradient {
@@ -274,16 +237,14 @@ Item {
                         anchors.left: parent.left
                         anchors.top: parent.top
                         anchors.margins: 4
-                        color: (pressure < pLimit - delta) ? "#aaa" :
-                                   (pressure < pLimit) ? "yellow" : "red"
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        // Показать калькулятор при клике
-                        calculator.open()
+                        color: {
+                            if (pressure < pLimit - delta)
+                                return "#aaa";   // серый
+                            else if (pressure < pLimit)
+                                return "yellow"; // жёлтый
+                            else
+                                return "red";    // красный
+                        }
                     }
                 }
             }
@@ -302,18 +263,6 @@ Item {
         onTriggered: {
             gauge.requestPaint()
             pointer.requestPaint()
-        }
-    }
-    // Таймер для задержки применения pLimit
-    Timer {
-        id: updatePLimitTimer
-        interval: 300
-        repeat: false
-        onTriggered: {
-            let value = parseFloat(limitInput.text)
-            if (!isNaN(value)) {
-                pLimit = value
-            }
         }
     }
 }

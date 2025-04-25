@@ -2,30 +2,9 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
-
 Item {
     id: root
     anchors.fill: parent
-    function processInput() {
-        let sanitizedText = targetInput.text.replace(",", ".");
-        let val = parseFloat(sanitizedText);
-        if (!isNaN(val)) {
-            needleCtrl.setTarget(val);
-            targetInput.text = val.toFixed(2);  // Стабилизируем отображение
-        } else {
-            console.log("Ошибка парсера числа:", sanitizedText);
-        }
-    }
-    Component.onCompleted: {
-        console.log("QML запущен, currentValue:", needleCtrl.currentValue)
-    }
-    Connections {
-        target: needleCtrl
-        onCurrentValueChanged: {
-            console.log("currentValue changed:", needleCtrl.currentValue)
-        }
-    }
-
     Rectangle {
            anchors.fill: parent
            color: "#333333"
@@ -36,11 +15,11 @@ Item {
     property real currentValue: 93.81
     property real stepSize: 0.5
 
-    //signal increase()
-    //signal decrease()
-    //signal openValve()
-    //signal closeValve()
-    //signal setTarget(real value)
+    signal increase()
+    signal decrease()
+    signal openValve()
+    signal closeValve()
+    signal setTarget(real value)
 
     Rectangle {
         id: groupBox
@@ -105,19 +84,11 @@ Item {
                         horizontalAlignment: TextInput.AlignHCenter
                         verticalAlignment: TextInput.AlignVCenter
                         background: null
-                        text: Number(needleCtrl.targetValue).toFixed(2)
+                        text: root.targetValue.toFixed(2)
                         validator: DoubleValidator { bottom: 0; top: 100 }
-                        inputMethodHints: Qt.ImhFormattedNumbersOnly
                         onEditingFinished: {
-                            let sanitized = text.replace(",", ".");  // поддержка запятой
-                            let val = parseFloat(sanitized);
-                            if (!isNaN(val) && val >= 0 && val <= 100) {
-                                needleCtrl.setTarget(val);
-                                text = val.toFixed(2); // перезапись с нормальным форматированием
-                            } else {
-                                // восстановим значение, если введено что-то некорректное
-                                text = Number(needleCtrl.targetValue).toFixed(2);
-                            }
+                            root.targetValue = parseFloat(text)
+                            root.setTarget(root.targetValue)
                         }
                     }
                 }
@@ -125,8 +96,7 @@ Item {
                 Column {
                     spacing: 2
                     Text {
-                        text: Number(needleCtrl.currentValue).toFixed(2)
-
+                        text: root.currentValue.toFixed(2)
                         font.pixelSize: 18
                         color: "white"
                         horizontalAlignment: Text.AlignHCenter
@@ -142,9 +112,9 @@ Item {
 
                 Rectangle {
                     width: 10
-                    height: 4
+                    height: 6
                     radius: 0
-                    color: needleCtrl.currentValue > 0 ? "green" : "red"
+                    color: root.currentValue > 0 ? "green" : "red"
                     anchors.verticalCenter: parent.verticalCenter
                 }
             }
@@ -177,25 +147,11 @@ Item {
                             font.pixelSize: 14
                             horizontalAlignment: TextInput.AlignHCenter
                             verticalAlignment: TextInput.AlignVCenter
-                            text: needleCtrl.stepSize.toString()
-                            validator: DoubleValidator {
-                                bottom: 0.0
-                                top: 100.0
-                                decimals: 3
-                                notation: DoubleValidator.StandardNotation
-                            }
-                            inputMethodHints: Qt.ImhFormattedNumbersOnly
-                            onEditingFinished: {
-                                // Заменяем запятую на точку перед разбором
-                                let sanitizedText = text.replace(",", ".");
-                                let val = parseFloat(sanitizedText);
-                                if (!isNaN(val)) {
-                                    needleCtrl.stepSize = val;
-                                    text = val.toFixed(2);
-                                }
-                            }
+                            text: root.stepSize.toString()
+                            validator: DoubleValidator { bottom: 0; top: 100 }
+                            onEditingFinished: root.stepSize = parseFloat(text)
                         }
-                                            }
+                    }
 
                     // Группа кнопок + и - с подписью
                     Column {
@@ -227,13 +183,10 @@ Item {
                                     anchors.fill: parent
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    font.pixelSize: 32
+                                    font.pixelSize: 16
                                     color: "white"
                                 }
-                                onClicked: {
-                                    needleCtrl.stepSize = parseFloat(stepInput.text.replace(",", "."));
-                                    needleCtrl.increase();
-                                }
+                                onClicked: root.increase()
                             }
 
                             Button {
@@ -255,13 +208,10 @@ Item {
                                     anchors.fill: parent
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    font.pixelSize: 32
+                                    font.pixelSize: 16
                                     color: "white"
                                 }
-                                onClicked: {
-                                    needleCtrl.stepSize = parseFloat(stepInput.text.replace(",", "."));
-                                    needleCtrl.decrease();
-                                }
+                                onClicked: root.decrease()
                             }
                         }
 
@@ -296,7 +246,7 @@ Item {
                             GradientStop { position: 1.0; color: "#3a3a3a" }
                         }
                     }
-                    onClicked: needleCtrl.openValve()
+                    onClicked: root.openValve()
                 }
 
                 Button {
@@ -315,7 +265,7 @@ Item {
                             GradientStop { position: 1.0; color: "#3a3a3a" }
                         }
                     }
-                    onClicked: needleCtrl.closeValve()
+                    onClicked: root.closeValve()
                 }
             }
         }
