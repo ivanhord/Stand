@@ -1,6 +1,6 @@
+#include <QQmlContext>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QQmlContext>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -23,43 +23,42 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->setCurrentIndex(ui->tabWidget->currentIndex());
 
     // Манометр
+    // === Создаем объект контроллера давления ===
     manometrCtrl = new ControlManometr(this);
-
     QQuickWidget *manometerWidget = ui->manometerWidget;
-
-    QQmlContext *context = manometerWidget->rootContext();
-    context->setContextProperty("manometrCtrl", manometrCtrl);
-
+    // Передаем объект в контекст
+    QQmlContext *contextM = manometerWidget->rootContext();
+    contextM->setContextProperty("manometrCtrl", manometrCtrl);
     manometerWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     manometerWidget->setSource(QUrl("qrc:/qml/assets/qml/Manometr.qml"));
     manometerWidget->setClearColor(Qt::transparent); //
     manometerWidget->setAttribute(Qt::WA_AlwaysStackOnTop);
+
     // Игольчатый экран
+    // === Создаем объект контроллера положения заслонки ===
+    needleTap = new ControlNeedleTap(this);
     QQuickWidget *valveWidget = ui->valveWidget;
+    QQmlContext *contextN = valveWidget->rootContext();
+    contextN->setContextProperty("needleCtrl", needleTap);
     valveWidget->setSource(QUrl(QStringLiteral("qrc:/qml/assets/qml/NeedleTap.qml")));
     valveWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     valveWidget->setClearColor(Qt::transparent);  // Прозрачный фон
 
+    // Текущий расход
+    // === Создаем объект контроллера  ===
+    rateCtrl = new ControlRate(this);
+    QQuickWidget *rateWidget = ui->rateWidget;
+    QQmlContext *contextR = rateWidget->rootContext();
+    contextR->setContextProperty("rateCtrl", rateCtrl);
+    rateWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    rateWidget->setClearColor(Qt::transparent);
+    rateWidget->setSource(QUrl("qrc:/qml/assets/qml/Rate.qml"));
+
+
+
+
 }
-void MainWindow::resizeEvent(QResizeEvent *event)
-{
-    QMainWindow::resizeEvent(event);
 
-    int w = this->width();
-    int h = this->height();
-
-    // Гибкая адаптация размера шрифта
-    int fontSize = qMax(10, qMin(24, h / 30));
-    QFont font;
-    font.setPointSize(fontSize);
-
-    // Применение к основным элементам
-    ui->tabWidget->setFont(font);
-    ui->recordLabel->setFont(font);
-    ui->dateTimeLabel->setFont(font);
-    ui->menuButton->setFont(font);
-    ui->recordIndicator->setFont(font);
-}
 
 
 

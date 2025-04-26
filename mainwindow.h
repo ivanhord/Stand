@@ -11,6 +11,8 @@
 #include <QFile>
 
 #include "controlmanometr.h"
+#include "controlneedletap.h"
+#include "controlrate.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -29,9 +31,8 @@ public:
 private:
     Ui::MainWindow *ui;
     ControlManometr *manometrCtrl;
+    ControlNeedleTap *needleTap;
+    ControlRate *rateCtrl;
     QTimer *m_updateTimer;
-
-protected:
-    void resizeEvent(QResizeEvent *event) override;
 };
 #endif // MAINWINDOW_H

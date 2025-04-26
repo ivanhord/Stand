@@ -11,11 +11,15 @@ CONFIG += c++17
 
 SOURCES += \
     controlmanometr.cpp \
+    controlneedletap.cpp \
+    controlrate.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     controlmanometr.h \
+    controlneedletap.h \
+    controlrate.h \
     mainwindow.h
 
 FORMS += \

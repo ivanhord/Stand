@@ -5,8 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-    qputenv("QT_QUICK_CONTROLS_STYLE", "Fusion");
-    qDebug() << "QT_QUICK_CONTROLS_STYLE" << qgetenv("QT_QUICK_CONTROLS_STYLE");
+    qputenv("QT_QUICK_CONTROLS_STYLE", "Material");
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
