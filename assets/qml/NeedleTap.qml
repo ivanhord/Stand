@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "qrc:/qml/assets/qml"
 
 
 Item {
@@ -35,12 +36,30 @@ Item {
     property real targetValue: 80
     property real currentValue: 93.81
     property real stepSize: 0.5
+    property string currentField: ""
 
-    //signal increase()
-    //signal decrease()
-    //signal openValve()
-    //signal closeValve()
-    //signal setTarget(real value)
+    property real newValue: 0
+
+
+    property alias targetInput: targetInput .text  // Привязка к полю target
+    property alias stepInput: stepInput.text      // Привязка к полю step
+
+    // Подключаем калькулятор
+    Calculator {
+        id: calculator
+        onClosed: {
+            if (targetInput.text === "") {
+                targetInput.text = newValue.toFixed(2);  // Обновляем поле target
+            } else if (stepInput.text === "") {
+                stepInput.text = newValue.toFixed(2);    // Обновляем поле step
+            }
+        }
+        onOpened: {
+            // При открытии калькулятора очищаем поле ввода
+            calculator.inputField.text = "";
+        }
+
+    }
 
     Rectangle {
         id: groupBox
@@ -108,17 +127,13 @@ Item {
                         text: Number(needleCtrl.targetValue).toFixed(2)
                         validator: DoubleValidator { bottom: 0; top: 100 }
                         inputMethodHints: Qt.ImhFormattedNumbersOnly
-                        onEditingFinished: {
-                            let sanitized = text.replace(",", ".");  // поддержка запятой
-                            let val = parseFloat(sanitized);
-                            if (!isNaN(val) && val >= 0 && val <= 100) {
-                                needleCtrl.setTarget(val);
-                                text = val.toFixed(2); // перезапись с нормальным форматированием
-                            } else {
-                                // восстановим значение, если введено что-то некорректное
-                                text = Number(needleCtrl.targetValue).toFixed(2);
-                            }
-                        }
+                        MouseArea {
+                            anchors.fill: parent
+                        onClicked: {
+                            calculator.inputField = targetInput;  // Передаем ссылку на поле targetField
+                            calculator.open();
+
+                        }}
                     }
                 }
 
@@ -185,14 +200,9 @@ Item {
                                 notation: DoubleValidator.StandardNotation
                             }
                             inputMethodHints: Qt.ImhFormattedNumbersOnly
-                            onEditingFinished: {
-                                // Заменяем запятую на точку перед разбором
-                                let sanitizedText = text.replace(",", ".");
-                                let val = parseFloat(sanitizedText);
-                                if (!isNaN(val)) {
-                                    needleCtrl.stepSize = val;
-                                    text = val.toFixed(2);
-                                }
+                            onPressed: {
+                                calculator.inputField = stepInput;
+                                calculator.open()
                             }
                         }
                                             }

@@ -16,12 +16,15 @@ Item {
         onClosed: {
             // Обновляем поле ввода при получении значения от калькулятора
             limitInput.text = newValue.toFixed(2);
+            pLimit = newValue;
         }
         onOpened: {
             // При открытии калькулятора очищаем поле ввода
-            calculator.calculatorInput.text = "";
+            calculator.inputField.text = "";
         }
     }
+
+    property alias limitInput: limitInput.text  // Привязка к полю limit
 
 
     // Импортируем калькулятор
@@ -282,8 +285,8 @@ Item {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        // Показать калькулятор при клике
-                        calculator.open()
+                        calculator.open();
+                        calculator.inputField = limitInput;  // Передаем ссылку на поле limitField
                     }
                 }
             }

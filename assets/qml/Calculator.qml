@@ -4,19 +4,22 @@ import QtQuick.Layouts 1.15
 
 Popup {
     id: calculator
-    width: 300
+    width: Math.min(Screen.width * 0.8, 240)
     height: 400
     modal: true
     focus: true
     closePolicy: Popup.CloseOnEscape
-    property alias calculatorInput: calculatorInput
+    background: null
+
+    //property alias calculatorInput: calculatorInput
+    property var inputField: null
 
     Rectangle {
         width: parent.width
         height: parent.height
         color: "#222"
         radius: 6
-        border.color: "#555"
+        border.color: "#666"
         border.width: 1
 
         ColumnLayout {
@@ -24,16 +27,31 @@ Popup {
             anchors.margins: 10
             spacing: 10
 
-            Text {
-                text: "Ввод значения"
-                color: "white"
-                font.pixelSize: 18
-                horizontalAlignment: Text.AlignHCenter
-                Layout.alignment: Qt.AlignHCenter
+            Rectangle {
+                color: "#444"
+                radius: 4
+                Layout.fillWidth: true
+                implicitHeight: 32
+
+                Text {
+                    text: "Ввод значения"
+                    font.bold: true
+                    font.pixelSize: 16
+                    color: "white"
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                }
             }
 
             TextField {
                 id: calculatorInput
+                background: Rectangle {
+                    color: "#000"
+                    border.color: "#aaa"
+                    border.width: 1
+                    radius: 4
+                }
                 color: "white"
                 font.pixelSize: 18
                 inputMethodHints: Qt.ImhFormattedNumbersOnly
@@ -53,8 +71,14 @@ Popup {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     background: Rectangle {
-                        radius: 2
-                        color: "#444"
+                        border.color: "#aaa"
+                        border.width: 1
+                        radius: 6
+                        gradient: Gradient {
+    GradientStop { position: 0.0; color: "#555" }
+    GradientStop { position: 1.0; color: "#222" }
+}
+
                     }
                     contentItem: Text {
                         text: "7"
@@ -78,8 +102,14 @@ Popup {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     background: Rectangle {
-                        radius: 2
-                        color: "#444"
+                        border.color: "#aaa"
+                        border.width: 1
+                        radius: 6
+                        gradient: Gradient {
+    GradientStop { position: 0.0; color: "#555" }
+    GradientStop { position: 1.0; color: "#222" }
+}
+
                     }
                 }
                 Button {
@@ -95,8 +125,14 @@ Popup {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     background: Rectangle {
-                        radius: 2
-                        color: "#444"
+                        border.color: "#aaa"
+                        border.width: 1
+                        radius: 6
+                        gradient: Gradient {
+    GradientStop { position: 0.0; color: "#555" }
+    GradientStop { position: 1.0; color: "#222" }
+}
+
                     }
                 }
                 Button {
@@ -114,8 +150,14 @@ Popup {
                     Layout.fillHeight: true
                     width: 60
                     background: Rectangle {
-                        radius: 2
-                        color: "#444"
+                        border.color: "#aaa"
+                        border.width: 1
+                        radius: 6
+                        gradient: Gradient {
+    GradientStop { position: 0.0; color: "#555" }
+    GradientStop { position: 1.0; color: "#222" }
+}
+
                     }
                 }
 
@@ -133,8 +175,14 @@ Popup {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     background: Rectangle {
-                        radius: 2
-                        color: "#444"
+                        border.color: "#aaa"
+                        border.width: 1
+                        radius: 6
+                        gradient: Gradient {
+    GradientStop { position: 0.0; color: "#555" }
+    GradientStop { position: 1.0; color: "#222" }
+}
+
                     }
                 }
                 Button {
@@ -150,8 +198,14 @@ Popup {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     background: Rectangle {
-                        radius: 2
-                        color: "#444"
+                        border.color: "#aaa"
+                        border.width: 1
+                        radius: 6
+                        gradient: Gradient {
+    GradientStop { position: 0.0; color: "#555" }
+    GradientStop { position: 1.0; color: "#222" }
+}
+
                     }
                 }
                 Button {
@@ -167,8 +221,14 @@ Popup {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     background: Rectangle {
-                        radius: 2
-                        color: "#444"
+                        border.color: "#aaa"
+                        border.width: 1
+                        radius: 6
+                        gradient: Gradient {
+    GradientStop { position: 0.0; color: "#555" }
+    GradientStop { position: 1.0; color: "#222" }
+}
+
                     }
                 }
 
@@ -186,8 +246,14 @@ Popup {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     background: Rectangle {
-                        radius: 2
-                        color: "#444"
+                        border.color: "#aaa"
+                        border.width: 1
+                        radius: 6
+                        gradient: Gradient {
+    GradientStop { position: 0.0; color: "#555" }
+    GradientStop { position: 1.0; color: "#222" }
+}
+
                     }
                 }
                 Button {
@@ -203,8 +269,14 @@ Popup {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     background: Rectangle {
-                        radius: 2
-                        color: "#444"
+                        border.color: "#aaa"
+                        border.width: 1
+                        radius: 6
+                        gradient: Gradient {
+    GradientStop { position: 0.0; color: "#555" }
+    GradientStop { position: 1.0; color: "#222" }
+}
+
                     }
                 }
                 Button {
@@ -220,8 +292,14 @@ Popup {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     background: Rectangle {
-                        radius: 2
-                        color: "#444"
+                        border.color: "#aaa"
+                        border.width: 1
+                        radius: 6
+                        gradient: Gradient {
+                            GradientStop { position: 0.0; color: "#555" }
+                            GradientStop { position: 1.0; color: "#222" }
+                        }
+
                     }
                 }
                 Button {
@@ -239,8 +317,14 @@ Popup {
                     Layout.fillHeight: true
                     width: 60
                     background: Rectangle {
-                        radius: 2
-                        color: "#444"
+                        border.color: "#aaa"
+                        border.width: 1
+                        radius: 6
+                        gradient: Gradient {
+    GradientStop { position: 0.0; color: "#555" }
+    GradientStop { position: 1.0; color: "#222" }
+}
+
                     }
                 }
 
@@ -258,8 +342,14 @@ Popup {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     background: Rectangle {
-                        radius: 2
-                        color: "#444"
+                        border.color: "#aaa"
+                        border.width: 1
+                        radius: 6
+                        gradient: Gradient {
+    GradientStop { position: 0.0; color: "#555" }
+    GradientStop { position: 1.0; color: "#222" }
+}
+
                     }
                 }
                 Button {
@@ -275,8 +365,14 @@ Popup {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     background: Rectangle {
-                        radius: 2
-                        color: "#444"
+                        border.color: "#aaa"
+                        border.width: 1
+                        radius: 6
+                        gradient: Gradient {
+    GradientStop { position: 0.0; color: "#555" }
+    GradientStop { position: 1.0; color: "#222" }
+}
+
                     }
                 }
                 Button {
@@ -292,8 +388,14 @@ Popup {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     background: Rectangle {
-                        radius: 2
-                        color: "#444"
+                        border.color: "#aaa"
+                        border.width: 1
+                        radius: 6
+                        gradient: Gradient {
+    GradientStop { position: 0.0; color: "#555" }
+    GradientStop { position: 1.0; color: "#222" }
+}
+
                     }
                 }
 
@@ -323,18 +425,23 @@ Popup {
 
                         // Проверяем, является ли введенное значение числом
                         if (isNaN(parsedValue)) {
-                            newValue = 700.00; // Если введено что-то нечисловое, ставим значение по умолчанию
+                            newValue = 0.00; // Если введено что-то нечисловое, ставим нулевое значение
                         } else {
                             // Если значение больше максимального, ставим максимальное значение
-                            if (parsedValue > pMax) {
-                                newValue = pMax;
-                            } else {
-                                newValue = parsedValue;
+                            if (typeof pMax !== "undefined" && parsedValue > pMax)
+                            {
+                                    newValue = pMax;
+                                } else {
+                                    newValue = parsedValue;
+                                }
                             }
-                        }
 
-                        // Обновляем поле ввода
-                        limitInput.text = newValue.toFixed(2);
+
+                        // Возвращаем значение в соответствующее поле
+                        // Если калькулятор получил ссылку на поле, обновляем его
+                        if (inputField) {
+                            inputField.text = newValue.toFixed(2);  // Обновляем соответствующее поле
+                        }
 
                         // Закрываем калькулятор после обновления значения
                         calculator.close();
@@ -343,8 +450,14 @@ Popup {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     background: Rectangle {
-                        radius: 2
-                        color: "#444"
+                        border.color: "#aaa"
+                        border.width: 1
+                        radius: 6
+                        gradient: Gradient {
+    GradientStop { position: 0.0; color: "#555" }
+    GradientStop { position: 1.0; color: "#222" }
+}
+
                     }
                 }
                 Button {
@@ -369,8 +482,14 @@ Popup {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     background: Rectangle {
-                        radius: 2
-                        color: "#444"
+                        border.color: "#aaa"
+                        border.width: 1
+                        radius: 6
+                        gradient: Gradient {
+    GradientStop { position: 0.0; color: "#555" }
+    GradientStop { position: 1.0; color: "#222" }
+}
+
                     }
                 }
             }
