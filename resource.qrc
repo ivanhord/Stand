@@ -9,5 +9,7 @@
         <file>assets/qml/Manometr.qml</file>
         <file>assets/qml/NeedleTap.qml</file>
         <file>assets/qml/Calculator.qml</file>
+        <file>assets/qml/Rate.qml</file>
+        <file>assets/qml/Liquid.qml</file>
     </qresource>
 </RCC>

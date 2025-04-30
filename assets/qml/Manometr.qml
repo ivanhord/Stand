@@ -9,34 +9,43 @@ Item {
     width: 400
     height: 400
 
-    property real newValue: 0
+    property real pressure: manometrCtrl.pressure
+    property real pMax: 1000
+    property real pLimit: 700
+    property string unit: "бар"
+    // Базовый размер для масштабирования
+    property real baseSize: Math.min(width, height)
+    property bool isSmallScreen: baseSize < 300
+
+    readonly property real delta: (pLimit < 500) ? 0.2 * pLimit : 100
+    property real angleStart: 135      // Начало шкалы (по часовой)
+    property real angleEnd: 45         // Конец шкалы (по часовой)
+    property real angleRange: ((angleEnd + 360) - angleStart) % 360
+
+    //property real newValue: 0
     // Подключаем калькулятор
     Calculator {
         id: calculator
-        onClosed: {
-            // Обновляем поле ввода при получении значения от калькулятора
-            limitInput.text = newValue.toFixed(2);
-            pLimit = newValue;
+        initialValue: pLimit
+
+        onAccepted: {
+            limitInput.text = value.toFixed(2);
+            pLimit = value;
         }
-        onOpened: {
-            // При открытии калькулятора очищаем поле ввода
-            calculator.inputField.text = "";
+        onCanceled: {
+            // Действия при отмене, если нужны
         }
     }
 
-    property alias limitInput: limitInput.text  // Привязка к полю limit
+    property alias limitInput: limitInput.text  // Привязка к полю limit*/
 
-
-    // Импортируем калькулятор
-    property real pressure: manometrCtrl.pressure
     Connections {
         target: manometrCtrl
         function onPressureChanged() {
             pressure = manometrCtrl.pressure
         }
     }
-    property real pMax: 1000
-    property real pLimit: 700
+
     Connections {
         target: root
         function onPLimitChanged() {
@@ -44,12 +53,6 @@ Item {
             pointer.requestPaint();
         }
     }
-    property string unit: "бар"
-
-    readonly property real delta: (pLimit < 500) ? 0.2 * pLimit : 100
-    property real angleStart: 135      // Начало шкалы (по часовой)
-    property real angleEnd: 45         // Конец шкалы (по часовой)
-    property real angleRange: ((angleEnd + 360) - angleStart) % 360
 
 
     function toAngle(p) {
@@ -63,7 +66,10 @@ Item {
 
         Canvas {
             id: gauge
-            anchors.fill: parent
+            anchors {
+                fill: parent
+                margins: baseSize *0.075
+            }
             onPaint: {
                 let ctx = getContext("2d");
                 ctx.clearRect(0, 0, width, height);
@@ -71,7 +77,7 @@ Item {
 
                 let centerX = width / 2;
                 let centerY = height / 2;
-                let radius = Math.min(centerX, centerY) - 30;
+                let radius = Math.min(centerX, centerY) - baseSize * 0.00001;
 
                 function toAngle(p) {
                     let normalized = (p / pMax) * angleRange;
@@ -98,14 +104,14 @@ Item {
                     ctx.moveTo(x1, y1);
                     ctx.lineTo(x2, y2);
                     ctx.strokeStyle = color;
-                    ctx.lineWidth = 2;
+                    ctx.lineWidth = baseSize * 0.005;;
                     ctx.stroke();
 
                     if (value >= 0) {
-                        let lx = centerX + (radius - length - 15) * Math.cos(angleRad);
-                        let ly = centerY + (radius - length - 15) * Math.sin(angleRad);
+                        let lx = centerX + (radius - length - baseSize * 0.04) * Math.cos(angleRad);
+                        let ly = centerY + (radius - length - baseSize * 0.04) * Math.sin(angleRad);
                         ctx.fillStyle = color;
-                        ctx.font = "11px sans-serif";
+                        ctx.font = (baseSize * 0.03) + "px sans-serif";
                         ctx.textAlign = "center";
                         ctx.textBaseline = "middle";
                         ctx.fillText(value.toFixed(0), lx, ly);
@@ -116,9 +122,9 @@ Item {
                 for (let p = 0; p <= pMax; p += pMax / 100) {
                     let angle = toAngle(p);
                     if (p % 100 === 0) {
-                        drawTick(angle, 20, p);
+                        drawTick(angle, baseSize * 0.05, p);
                     } else {
-                        drawTick(angle, 10);
+                        drawTick(angle, baseSize * 0.025);
                     }
                 }
 
@@ -134,7 +140,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width * 0.6
             wrapMode: Text.WordWrap
-            font.pixelSize: Math.max(10, root.width * 0.035)  // адаптивный размер
+            font.pixelSize: baseSize * 0.035
             color: "white"
             horizontalAlignment: Text.AlignHCenter
 
@@ -145,12 +151,13 @@ Item {
             onParentChanged: updateY()
 
             function updateY() {
-                let r_outer = Math.min(root.width, root.height) / 2 - 30;  // внешний радиус шкалы
-                let r_inner = 60; // радиус центрального круга
+                let r_outer = baseSize / 2 - baseSize * 0.075;
+                let r_inner = baseSize * 0.15;
                 let mid = (r_outer + r_inner) / 2;
-                let offest = 12;
-                y = root.height / 2 + offest - mid - height / 2;
+                let offset = baseSize * 0.03;
+                y = root.height / 2 + offset - mid - height / 2;
             }
+
         }
         // Стрелка
         Canvas {
@@ -162,10 +169,10 @@ Item {
 
                 let cx = width / 2;
                 let cy = height / 2;
-                let length = Math.min(cx, cy) - 40;
+                let length = baseSize * 0.4;
                 let angle = toAngle(Math.min(pressure, pMax)) * Math.PI / 180;
 
-                let baseWidth = 12;
+                let baseWidth = baseSize * 0.03;
                 let tipX = cx + length * Math.cos(angle);
                 let tipY = cy + length * Math.sin(angle);
 
@@ -192,43 +199,38 @@ Item {
         // Центральный круг с текущим значением
         Rectangle {
             anchors.centerIn: parent
-            width: 120
-            height: 120
-            radius: 60
+            width: baseSize * 0.3
+            height: width
+            radius: width / 2
             color: "#444"
             border.color: "#888"
 
             Column {
                 anchors.centerIn: parent
-                spacing: 6
+                spacing: baseSize * 0.015
                 Text {
                     text: pressure.toFixed(2)
-                    font.pixelSize: 24
+                    font.pixelSize: baseSize * 0.06
                     color: (pressure < pLimit - delta) ? "white" :
                            (pressure < pLimit) ? "yellow" : "red"
                     horizontalAlignment: Text.AlignHCenter
                 }
-                /*Text {
-                    text: unit
-                    font.pixelSize: 12
-                    color: "lightgray"
-                    horizontalAlignment: Text.AlignHCenter
-                }*/
+
             }
         }
 
         // Поле ввода предельного значения
         Row {
             id: limitControl
-            spacing: 6
+            spacing: baseSize * 0.015
 
             // Вычисляем позицию по центру нижнего участка дуги
-            property real radius: Math.min(root.width, root.height) / 2 - 40
+            property real radius: baseSize / 2 - baseSize * 0.1
             property real angleDeg: (angleStart + angleEnd + 360) / 2 % 360
             property real angleRad: angleDeg * Math.PI / 180
 
             x: root.width / 2 + radius * Math.cos(angleRad) - width / 2
-            y: root.height / 2 + radius - height / 2 - 20
+            y: root.height / 2 + radius - height / 2 - baseSize * 0.05
 
 
             // Цвет прямоугольного индикатора слева
@@ -240,13 +242,19 @@ Item {
             TextField {
                 id: limitInput
                 text: pLimit.toFixed(2)
+                //elide: Text.ElideNone
+                clip: false
                 validator: DoubleValidator { bottom: 0; top: pMax }
-                width: 80
-                height: 32
-                font.pixelSize: 14
+                width: baseSize * 0.2
+                height: baseSize * 0.08
+                font.pixelSize: baseSize * 0.035
                 color: "white"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
+                leftPadding: baseSize * 0.01
+                rightPadding: baseSize * 0.01
+                topPadding: baseSize * 0.01
+                bottomPadding: baseSize * 0.01
 
                 onTextChanged: {
                     updatePLimitTimer.restart()
@@ -265,18 +273,18 @@ Item {
                         GradientStop { position: 0.0; color: "#3A3A3A" }
                         GradientStop { position: 0.882927; color: "#656565" }
                     }
-                    radius: 4
+                    radius: baseSize * 0.01
 
 
                     // Индикатор зоны давления
                     Rectangle {
                         id: zoneIndicator
-                        width: 10
-                        height: 4
-                        radius: 2
+                        width: baseSize * 0.025
+                        height: baseSize * 0.01
+                        radius: baseSize * 0.005
                         anchors.left: parent.left
                         anchors.top: parent.top
-                        anchors.margins: 4
+                        anchors.margins: baseSize * 0.01
                         color: (pressure < pLimit - delta) ? "#aaa" :
                                    (pressure < pLimit) ? "yellow" : "red"
                     }
@@ -284,17 +292,33 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: {
-                        calculator.open();
-                        calculator.inputField = limitInput;  // Передаем ссылку на поле limitField
-                    }
+                    onClicked: showCalculator()
                 }
             }
 
         }
+    }
+    // Функция для показа калькулятора
+    function showCalculator() {
+        var component = Qt.createComponent("Calculator.qml")
+        if (component.status === Component.Ready) {
+            var calc = component.createObject(null, {
+                initialValue: ""//,
+                //inputField: inputField                                  //parseFloat(limitInput.text)
+            })
 
+            calc.accepted.connect(function(value) {
+                limitInput.text = Number(value).toFixed(2)
+                pLimit = Number(value)
+                calc.destroy()
+            })
 
+            calc.canceled.connect(function() {
+                calc.destroy()
+            })
 
+            calc.show()
+        }
     }
 
     // Автообновление

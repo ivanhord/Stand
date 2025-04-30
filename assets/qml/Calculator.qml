@@ -1,18 +1,30 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+//import QtQuick.Window 2.15
 
-Popup {
+Window {
     id: calculator
-    width: Math.min(Screen.width * 0.8, 240)
+    width: 240
     height: 400
-    modal: true
-    focus: true
-    closePolicy: Popup.CloseOnEscape
-    background: null
+    flags: Qt.Popup | Qt.WindowStaysOnTopHint
+    modality: Qt.ApplicationModal
 
-    //property alias calculatorInput: calculatorInput
-    property var inputField: null
+    // центрирование относительно родителя
+    x: Screen.width / 2 - width / 2
+    y: Screen.height / 2 - height / 2
+
+    property string initialValue: ""
+    property alias inputField: calculatorInput  // Делаем поле доступным извне
+    signal accepted(real value)
+    signal canceled()
+
+    onVisibleChanged: {
+        if (visible) {
+            calculatorInput.text = initialValue
+            calculatorInput.forceActiveFocus()
+        }
+    }
 
     Rectangle {
         width: parent.width
@@ -56,7 +68,13 @@ Popup {
                 font.pixelSize: 18
                 inputMethodHints: Qt.ImhFormattedNumbersOnly
                 Layout.fillWidth: true
-                text: "0"
+                text: initialValue
+                validator: DoubleValidator {
+                    bottom: -Infinity
+                    top: Infinity
+                    decimals: 2
+                    notation: DoubleValidator.ScientificNotation
+                }
             }
 
             GridLayout {
@@ -410,41 +428,23 @@ Popup {
                         anchors.centerIn: parent
                     }
                     onClicked: {
-                        // Если поле пустое, не изменяем значение
-                        if (calculatorInput.text.trim() === "") {
-                            // Просто закрываем калькулятор, не меняя значения
-                            calculator.close();
+                        let valueText = calculatorInput.text.trim();
+
+                        // Если поле пустое - закрываем калькулятор
+                        if (valueText === "") {
+                            close();
                             return;
                         }
 
-                        // Убираем несколько точек подряд
-                        let validText = calculatorInput.text.replace(/\.+/g, ".");
+                        // Преобразуем в число с заменой запятых
+                        let value = Number(valueText.replace(",", "."));
 
-                        // Преобразуем в число
-                        let parsedValue = parseFloat(validText);
-
-                        // Проверяем, является ли введенное значение числом
-                        if (isNaN(parsedValue)) {
-                            newValue = 0.00; // Если введено что-то нечисловое, ставим нулевое значение
-                        } else {
-                            // Если значение больше максимального, ставим максимальное значение
-                            if (typeof pMax !== "undefined" && parsedValue > pMax)
-                            {
-                                    newValue = pMax;
-                                } else {
-                                    newValue = parsedValue;
-                                }
-                            }
-
-
-                        // Возвращаем значение в соответствующее поле
-                        // Если калькулятор получил ссылку на поле, обновляем его
-                        if (inputField) {
-                            inputField.text = newValue.toFixed(2);  // Обновляем соответствующее поле
+                        // Проверяем валидность числа
+                        if (isNaN(value)) {
+                            value = 0
                         }
-
-                        // Закрываем калькулятор после обновления значения
-                        calculator.close();
+                        accepted(value);
+                        close();
                     }
                     Layout.columnSpan: 2
                     Layout.fillWidth: true
@@ -470,12 +470,6 @@ Popup {
                         anchors.centerIn: parent
                     }
                     onClicked: {
-                        // Если поле пустое, не изменяем значение
-                        if (calculatorInput.text.trim() === "") {
-                            // Просто закрываем калькулятор, не меняя значения
-                            calculator.close();
-                            return;
-                        }
                         calculator.close()
                     }
                     Layout.columnSpan: 2
@@ -489,10 +483,11 @@ Popup {
     GradientStop { position: 0.0; color: "#555" }
     GradientStop { position: 1.0; color: "#222" }
 }
-
+}
                     }
                 }
             }
         }
     }
-}
+
+

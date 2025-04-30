@@ -10,14 +10,18 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    calculatorcontroller.cpp \
     controlmanometr.cpp \
     controlneedletap.cpp \
+    controlrate.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    calculatorcontroller.h \
     controlmanometr.h \
     controlneedletap.h \
+    controlrate.h \
     mainwindow.h
 
 FORMS += \

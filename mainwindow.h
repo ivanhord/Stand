@@ -12,6 +12,8 @@
 
 #include "controlmanometr.h"
 #include "controlneedletap.h"
+#include "controlrate.h"
+//#include "calculatorcontroller.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -31,6 +33,11 @@ private:
     Ui::MainWindow *ui;
     ControlManometr *manometrCtrl;
     ControlNeedleTap *needleTap;
+    ControlRate *rateCtrl;
+    //CalculatorController *calculatorCtrl;
     QTimer *m_updateTimer;
+
+private slots:
+    void updateDateTime();
 };
 #endif // MAINWINDOW_H

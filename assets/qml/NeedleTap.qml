@@ -1,20 +1,45 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import "qrc:/qml/assets/qml"
+//import "qrc:/qml/assets/qml"
 
 
 Item {
     id: root
     anchors.fill: parent
     function processInput() {
-        let sanitizedText = targetInput.text.replace(",", ".");
-        let val = parseFloat(sanitizedText);
-        if (!isNaN(val)) {
-            needleCtrl.setTarget(val);
-            targetInput.text = val.toFixed(2);  // Стабилизируем отображение
-        } else {
-            console.log("Ошибка парсера числа:", sanitizedText);
+        if (!targetInput.activeFocus) {
+            let sanitizedText = targetInput.text.replace(",", ".");
+            let val = parseFloat(sanitizedText);
+            if (!isNaN(val)) {
+                needleCtrl.setTarget(val);
+                targetInput.text = val.toFixed(2);
+            }
+        }
+    }
+
+    function showCalculator(inputField) {
+        var component = Qt.createComponent("Calculator.qml");
+        if (component.status === Component.Ready) {
+            var calc = component.createObject(null, {
+                initialValue: parseFloat(inputField.text)
+            });
+
+            calc.accepted.connect(function(value) {
+                inputField.text = value.toFixed(2);
+                if (inputField === targetInput) {
+                    needleCtrl.setTarget(value);
+                } else if (inputField === stepInput) {
+                    needleCtrl.stepSize = value;
+                }
+                calc.destroy();
+            });
+
+            calc.canceled.connect(function() {
+                calc.destroy();
+            });
+
+            calc.show();
         }
     }
     Component.onCompleted: {
@@ -22,7 +47,7 @@ Item {
     }
     Connections {
         target: needleCtrl
-        onCurrentValueChanged: {
+        function onCurrentValueChanged() {
             console.log("currentValue changed:", needleCtrl.currentValue)
         }
     }
@@ -41,11 +66,11 @@ Item {
     property real newValue: 0
 
 
-    property alias targetInput: targetInput .text  // Привязка к полю target
+    property alias targetInput: targetInput.text  // Привязка к полю target
     property alias stepInput: stepInput.text      // Привязка к полю step
 
     // Подключаем калькулятор
-    Calculator {
+  /*  Calculator {
         id: calculator
         onClosed: {
             if (targetInput.text === "") {
@@ -59,7 +84,7 @@ Item {
             calculator.inputField.text = "";
         }
 
-    }
+    }*/
 
     Rectangle {
         id: groupBox
@@ -127,13 +152,12 @@ Item {
                         text: Number(needleCtrl.targetValue).toFixed(2)
                         validator: DoubleValidator { bottom: 0; top: 100 }
                         inputMethodHints: Qt.ImhFormattedNumbersOnly
+                        onEditingFinished: root.processInput()
+                        onAccepted: root.processInput()
                         MouseArea {
                             anchors.fill: parent
-                        onClicked: {
-                            calculator.inputField = targetInput;  // Передаем ссылку на поле targetField
-                            calculator.open();
-
-                        }}
+                            onClicked: showCalculator(targetInput)
+                        }
                     }
                 }
 
@@ -201,8 +225,7 @@ Item {
                             }
                             inputMethodHints: Qt.ImhFormattedNumbersOnly
                             onPressed: {
-                                calculator.inputField = stepInput;
-                                calculator.open()
+                                onClicked: showCalculator(stepInput)
                             }
                         }
                                             }
