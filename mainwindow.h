@@ -6,6 +6,7 @@
 #include <QQuickWidget>
 #include <QQmlContext>
 #include <QDateTime>
+#include <QPixmap>
 #include <QTimer>
 #include <QDir>
 #include <QFile>
@@ -28,6 +29,11 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    // Вызывать при появлении новой ошибки
+    void notifyError();
+
+    // Вызывать, когда оператор квитирует ошибки (переходит на страницу ошибок или нажимает OK)
+    void acknowledgeErrors();
 
 private:
     Ui::MainWindow *ui;
@@ -36,8 +42,16 @@ private:
     ControlRate *rateCtrl;
     //CalculatorController *calculatorCtrl;
     QTimer *m_updateTimer;
+    bool    m_hasError       = false;   // есть непросмотренные ошибки?
+    bool    m_acknowledged   = true;    // текущие ошибки уже квитированы?
+    bool    m_blinkState     = false;   // текущее состояние мигания (цвет)
+    QTimer  m_blinkTimer;               // таймер для мигания
+
+    QPixmap m_pixmapGray;
+    QPixmap m_pixmapOrange;
 
 private slots:
     void updateDateTime();
+    void onBlinkTimeout();
 };
 #endif // MAINWINDOW_H

@@ -10,14 +10,17 @@ Item {
     height: 400
 
     property real pressure: manometrCtrl.pressure
-    property real pMax: 1000
-    property real pLimit: 700
+
+    readonly property real pMax: 1000
+    property real pLimit: manometrCtrl.pLimit
+    readonly property real arrowMax: pLimit + 10
+
     property string unit: "бар"
     // Базовый размер для масштабирования
     property real baseSize: Math.min(width, height)
     property bool isSmallScreen: baseSize < 300
 
-    readonly property real delta: (pLimit < 500) ? 0.2 * pLimit : 100
+    readonly property real delta: (pLimit * 0.2 < 100) ? (pLimit * 0.2) : 100
     property real angleStart: 135      // Начало шкалы (по часовой)
     property real angleEnd: 45         // Конец шкалы (по часовой)
     property real angleRange: ((angleEnd + 360) - angleStart) % 360
@@ -77,7 +80,7 @@ Item {
 
                 let centerX = width / 2;
                 let centerY = height / 2;
-                let radius = Math.min(centerX, centerY) - baseSize * 0.00001;
+                let radius = Math.min(centerX, centerY) - baseSize * 0.000001;
 
                 function toAngle(p) {
                     let normalized = (p / pMax) * angleRange;
@@ -111,7 +114,7 @@ Item {
                         let lx = centerX + (radius - length - baseSize * 0.04) * Math.cos(angleRad);
                         let ly = centerY + (radius - length - baseSize * 0.04) * Math.sin(angleRad);
                         ctx.fillStyle = color;
-                        ctx.font = (baseSize * 0.03) + "px sans-serif";
+                        ctx.font = (baseSize * 0.045) + "px sans-serif";
                         ctx.textAlign = "center";
                         ctx.textBaseline = "middle";
                         ctx.fillText(value.toFixed(0), lx, ly);
@@ -140,7 +143,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width * 0.6
             wrapMode: Text.WordWrap
-            font.pixelSize: baseSize * 0.035
+            font.pixelSize: baseSize * 0.032
             color: "white"
             horizontalAlignment: Text.AlignHCenter
 
@@ -170,7 +173,7 @@ Item {
                 let cx = width / 2;
                 let cy = height / 2;
                 let length = baseSize * 0.4;
-                let angle = toAngle(Math.min(pressure, pMax)) * Math.PI / 180;
+                let angle = toAngle(Math.min(pressure, arrowMax)) * Math.PI / 180;
 
                 let baseWidth = baseSize * 0.03;
                 let tipX = cx + length * Math.cos(angle);
@@ -245,8 +248,8 @@ Item {
                 //elide: Text.ElideNone
                 clip: false
                 validator: DoubleValidator { bottom: 0; top: pMax }
-                width: baseSize * 0.2
-                height: baseSize * 0.08
+                width: baseSize * 0.25
+                height: baseSize * 0.085
                 font.pixelSize: baseSize * 0.035
                 color: "white"
                 horizontalAlignment: Text.AlignHCenter
@@ -303,8 +306,7 @@ Item {
         var component = Qt.createComponent("Calculator.qml")
         if (component.status === Component.Ready) {
             var calc = component.createObject(null, {
-                initialValue: ""//,
-                //inputField: inputField                                  //parseFloat(limitInput.text)
+                initialValue: ""
             })
 
             calc.accepted.connect(function(value) {
@@ -339,7 +341,7 @@ Item {
         onTriggered: {
             let value = parseFloat(limitInput.text)
             if (!isNaN(value)) {
-                pLimit = value
+                manometrCtrl.pLimit = value
             }
         }
     }

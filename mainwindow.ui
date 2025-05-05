@@ -105,12 +105,12 @@ QTabBar::tab:selected {
           <widget class="QLabel" name="alertIconLabel">
            <property name="maximumSize">
             <size>
-             <width>16777215</width>
-             <height>44</height>
+             <width>46</width>
+             <height>30</height>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">border-image: url(:/icons/assets/alert.svg) 0 0 0 0 stretch stretch; min-width: 60px; max-height: 44px;</string>
+            <string notr="true">border-image: url(:/icons/assets/alert_gray.svg) 0 0 0 0 stretch stretch; max-width: 60px; max-height: 44px;</string>
            </property>
           </widget>
          </item>
@@ -241,14 +241,14 @@ QTabBar::tab:selected {
           <item>
            <widget class="QQuickWidget" name="rateWidget">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QQuickWidget" name="liquidWidget">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
            </widget>
           </item>

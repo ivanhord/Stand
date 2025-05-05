@@ -7,6 +7,13 @@ import QtQuick.Layouts 1.15
 Item {
     id: root
     anchors.fill: parent
+
+    property real targetValue: 80
+    property real currentValue: 93.81
+    property real stepSize: 0.5
+    property string currentField: ""
+
+    property real newValue: 0
     function processInput() {
         if (!targetInput.activeFocus) {
             let sanitizedText = targetInput.text.replace(",", ".");
@@ -58,38 +65,18 @@ Item {
            z: -1 // обязательно, чтобы он был на заднем плане
        }
 
-    property real targetValue: 80
-    property real currentValue: 93.81
-    property real stepSize: 0.5
-    property string currentField: ""
 
-    property real newValue: 0
 
 
     property alias targetInput: targetInput.text  // Привязка к полю target
     property alias stepInput: stepInput.text      // Привязка к полю step
 
     // Подключаем калькулятор
-  /*  Calculator {
-        id: calculator
-        onClosed: {
-            if (targetInput.text === "") {
-                targetInput.text = newValue.toFixed(2);  // Обновляем поле target
-            } else if (stepInput.text === "") {
-                stepInput.text = newValue.toFixed(2);    // Обновляем поле step
-            }
-        }
-        onOpened: {
-            // При открытии калькулятора очищаем поле ввода
-            calculator.inputField.text = "";
-        }
-
-    }*/
 
     Rectangle {
         id: groupBox
-        width: 270
-        height: 230
+        width:  Math.min(parent.width - 32, 270)
+        height: Math.min(parent.height - 32, 230)
         anchors.centerIn: parent
         radius: 8
         border.color: "#888"

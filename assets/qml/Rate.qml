@@ -5,6 +5,12 @@ import QtQuick.Layouts 1.15
 Rectangle {
     color: "#333"
     anchors.fill: parent
+ /*   Text {
+        text: rateCtrl ? "rateCtrl OK" : "rateCtrl undefined"
+        color: "red"
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+    }*/
 
     property int buttonWidth: 120
     property int buttonHeight: 40
@@ -18,8 +24,10 @@ Rectangle {
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
             Rectangle {
-                width: buttonWidth
-                height: buttonHeight
+                Layout.preferredWidth: buttonWidth
+                Layout.preferredHeight: buttonHeight
+                Layout.minimumWidth: buttonWidth
+                Layout.minimumHeight: buttonHeight
                 radius: 6
                 color: "#555555"
 
@@ -32,15 +40,19 @@ Rectangle {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: rateCtrl.resetFlow()
+
+                    onClicked: {
+                        console.log("QML: Reset button clicked")
+                        rateCtrl.resetFlow()
+                    }
                 }
             }
         }
-
         // 2 столбец - Расход и Суммарный объем
         ColumnLayout {
             spacing: 10
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+            Layout.fillHeight: true
 
             Text {
                 text: rateCtrl.flowRate.toFixed(2)
@@ -69,7 +81,10 @@ Rectangle {
                 font.pixelSize: 14
                 color: "lightgray"
                 horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
                 Layout.alignment: Qt.AlignHCenter
+                wrapMode: Text.WordWrap
+                //Layout.preferredHeight: 10
             }
         }
 

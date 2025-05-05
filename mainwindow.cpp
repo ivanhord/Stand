@@ -8,13 +8,26 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    // Настройка адаптивности
-    setMinimumSize(800, 600);
+
+    setMinimumSize(850, 650);
     qmlRegisterType<QWindow>("QtQuick.Window", 2, 0, "Window");
-    // Настройка политик изменения размеров
+    // Изменения размеров
     ui->centralWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     ui->headerFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    ui->stackedWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);    
+    ui->stackedWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    // Таймер мигания — 500 мс
+    m_blinkTimer.setInterval(500);
+    connect(&m_blinkTimer, &QTimer::timeout, this, &MainWindow::onBlinkTimeout);
+
+    // Изначально иконка в сером цвете (нет ошибок)
+    ui->alertIconLabel->setFixedSize(46, 30);
+    ui->alertIconLabel->setScaledContents(true);
+
+    m_pixmapGray   = QPixmap(":/icons/assets/alert_gray.svg");
+    m_pixmapOrange = QPixmap(":/icons/assets/alert_orange.svg");
+    // начальный серый
+    ui->alertIconLabel->setPixmap(m_pixmapGray);
 
     // Инициализация таймера для обновления времени
     m_updateTimer = new QTimer(this);
@@ -28,6 +41,17 @@ MainWindow::MainWindow(QWidget *parent)
     });
     // Установить начальную страницу
     ui->stackedWidget->setCurrentIndex(ui->tabWidget->currentIndex());
+
+    this->resize(1024, 768);
+
+    // Задаём веса для вертикали
+    ui->standLayout->setStretch(0, 2);
+    ui->standLayout->setStretch(1, 1);
+    // Задаём веса для горизонтали
+    ui->upperLayout->setStretch(0, 2);
+    ui->upperLayout->setStretch(1, 1);
+    ui->downLayout->setStretch(0, 2);
+    ui->downLayout->setStretch(1, 1);
 
     // Манометр
     // === Создаем объект контроллера давления ===
@@ -70,6 +94,8 @@ MainWindow::MainWindow(QWidget *parent)
     liquidWidget->setClearColor(Qt::transparent);
     liquidWidget->setSource(QUrl("qrc:/qml/assets/qml/Liquid.qml"));
 
+    notifyError();
+
 }
 
 void MainWindow::updateDateTime()
@@ -80,6 +106,43 @@ void MainWindow::updateDateTime()
             .arg(currentDateTime.toString("HH:mm"),
                  currentDateTime.toString("dd.MM.yyyy"))
         );
+}
+
+void MainWindow::notifyError()
+{
+    // Появилась новая необработанная ошибка
+    m_hasError     = true;
+    m_acknowledged = false;
+    m_blinkState   = false;    // начнём с серого
+    m_blinkTimer.start();
+
+  }
+
+void MainWindow::acknowledgeErrors()
+{
+    if (!m_hasError) return;
+
+    m_acknowledged = true;
+    m_blinkTimer.stop();
+
+    // Иконка горит оранжевым
+    ui->alertIconLabel->setPixmap(m_pixmapOrange);
+
+}
+
+void MainWindow::onBlinkTimeout()
+{
+    if (!m_hasError || m_acknowledged) {
+        // Если ошибок нет или они квитированы — останавливаем мигание
+        m_blinkTimer.stop();
+        return;
+    }
+
+    // Переключаем цвет
+    m_blinkState = !m_blinkState;
+    ui->alertIconLabel->setPixmap(m_blinkState
+                                      ? m_pixmapOrange
+                                      : m_pixmapGray);
 }
 
 MainWindow::~MainWindow()
