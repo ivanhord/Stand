@@ -11,6 +11,9 @@
    </rect>
   </property>
   <widget class="QWidget" name="centralWidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
      <number>0</number>
@@ -62,7 +65,7 @@ QTabBar::tab:selected {
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>1</number>
            </property>
            <property name="documentMode">
             <bool>true</bool>
@@ -102,12 +105,12 @@ QTabBar::tab:selected {
           <widget class="QLabel" name="alertIconLabel">
            <property name="maximumSize">
             <size>
-             <width>16777215</width>
+             <width>60</width>
              <height>44</height>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">border-image: url(:/icons/assets/alert.svg) 0 0 0 0 stretch stretch; min-width: 60px; max-height: 44px;</string>
+            <string notr="true">border-image: url(:/icons/assets/alert_gray.svg) 0 0 0 0 stretch stretch; max-width: 60px; max-height: 44px;</string>
            </property>
           </widget>
          </item>
@@ -157,7 +160,7 @@ QTabBar::tab:selected {
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="menuButton">
+          <widget class="QToolButton" name="btnMenu">
            <property name="styleSheet">
             <string notr="true">    QToolButton {
       background-color:qlineargradient(spread:reflect, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(58, 58, 58, 255), stop:0.882927 rgba(101, 101, 101, 255));
@@ -202,45 +205,417 @@ QTabBar::tab:selected {
        <string notr="true">background-color: #333333;</string>
       </property>
       <widget class="QWidget" name="standPage">
-       <layout class="QVBoxLayout" name="standLayout">
-<item>
-       <layout class="QHBoxLayout" name="upperLayout">
+       <layout class="QVBoxLayout" name="standLayout" stretch="0,0">
         <item>
-         <widget class="QQuickWidget" name="manometerWidget">
-          <property name="minimumSize">
-           <size>
-            <width>150</width>
-            <height>150</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background: transparent;</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="upperLayout" stretch="0,0">
+          <item>
+           <widget class="QQuickWidget" name="manometerWidget">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>150</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background: transparent;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QQuickWidget" name="valveWidget">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>120</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: #333333;</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QQuickWidget" name="valveWidget">
-          <property name="minimumSize">
-           <size>
-            <width>120</width>
-            <height>120</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">color: #333333;</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="downLayout" stretch="0,0">
+          <item>
+           <widget class="QQuickWidget" name="rateWidget">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QQuickWidget" name="liquidWidget">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
-</layout>
-</item>
-<item>
-      <widget class="QQuickWidget" name="rateWidget">
-</widget>
-</item>
        </layout>
       </widget>
       <widget class="QWidget" name="summaryPage">
        <layout class="QVBoxLayout" name="summaryLayout"/>
+      </widget>
+      <widget class="QWidget" name="menuPage">
+       <property name="styleSheet">
+        <string notr="true">
+QPushButton {
+      background-color:qlineargradient(spread:reflect, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(58, 58, 58, 255), stop:0.882927 rgba(101, 101, 101, 255));
+    color: white;
+    font-size: 14pt;
+    padding: 12px;
+    border-radius: 6px;
+}
+QPushButton:hover {
+    background-color: #3a3a3a;
+}
+  </string>
+       </property>
+       <layout class="QVBoxLayout" name="menuLayout" stretch="0,1,0">
+        <item>
+         <widget class="QLabel" name="menuTitle">
+          <property name="styleSheet">
+           <string notr="true">color: white; font-size: 24pt; font-weight: bold; margin: 10px;</string>
+          </property>
+          <property name="text">
+           <string>Меню</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignHCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout">
+          <item>
+           <spacer name="horizontalSpacerLeft">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QGridLayout" name="menuGrid">
+            <property name="spacing">
+             <number>20</number>
+            </property>
+            <item row="2" column="2">
+             <widget class="QPushButton" name="btnServices">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Сервисы</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QPushButton" name="btnSettings">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Настройки</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="3">
+             <widget class="QPushButton" name="btnInstall">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Установки</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QPushButton" name="btnDatetime">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Дата и время</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="2" column="3">
+             <widget class="QPushButton" name="btnFile">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Файл</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QPushButton" name="btnMessages">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Сообщения</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="3">
+             <widget class="QPushButton" name="btnAbout">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>О программе</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QPushButton" name="btnSummary">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Сводка</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QPushButton" name="btnUsers">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Пользователи</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QPushButton" name="btnMain">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Главное</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QPushButton" name="btnScreen">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Экран</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QPushButton" name="btnState">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Состояние</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="3">
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="horizontalSpacerRight">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="exitLayout">
+          <item>
+           <spacer name="horizontalSpacerExit">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnExit">
+            <property name="styleSheet">
+             <string notr="true">color: white; background: transparent; font-size: 20pt;</string>
+            </property>
+            <property name="text">
+             <string>⏏</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
