@@ -14,6 +14,7 @@
 #include "controlmanometr.h"
 #include "controlneedletap.h"
 #include "controlrate.h"
+#include "controlsummary.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -39,7 +40,8 @@ private:
     ControlManometr *manometrCtrl;
     ControlNeedleTap *needleTap;
     ControlRate *rateCtrl;
-    //CalculatorController *calculatorCtrl;
+    ControlSummary *summaryCtrl;
+
     QTimer *m_updateTimer;
     bool    m_hasError       = false;   // есть непросмотренные ошибки?
     bool    m_acknowledged   = true;    // текущие ошибки уже квитированы?

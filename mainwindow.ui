@@ -184,7 +184,7 @@ QTabBar::tab:selected {
             </size>
            </property>
            <property name="toolButtonStyle">
-            <enum>Qt::ToolButtonIconOnly</enum>
+            <enum>Qt::ToolButtonTextUnderIcon</enum>
            </property>
           </widget>
          </item>
@@ -257,7 +257,18 @@ QTabBar::tab:selected {
        </layout>
       </widget>
       <widget class="QWidget" name="summaryPage">
-       <layout class="QVBoxLayout" name="summaryLayout"/>
+       <layout class="QVBoxLayout" name="summaryLayout">
+        <item>
+         <widget class="QQuickWidget" name="summaryWidget">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="resizeMode">
+           <enum>QQuickWidget::SizeRootObjectToView</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="menuPage">
        <property name="styleSheet">
@@ -289,7 +300,7 @@ QPushButton:hover {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout">
+         <layout class="QHBoxLayout" name="gridLayout">
           <item>
            <spacer name="horizontalSpacerLeft">
             <property name="orientation">
@@ -311,8 +322,8 @@ QPushButton:hover {
             <property name="spacing">
              <number>20</number>
             </property>
-            <item row="2" column="2">
-             <widget class="QPushButton" name="btnServices">
+            <item row="3" column="0">
+             <widget class="QPushButton" name="btnScreen">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
@@ -326,7 +337,7 @@ QPushButton:hover {
                </size>
               </property>
               <property name="text">
-               <string>Сервисы</string>
+               <string>Экран</string>
               </property>
              </widget>
             </item>
@@ -349,8 +360,8 @@ QPushButton:hover {
               </property>
              </widget>
             </item>
-            <item row="1" column="3">
-             <widget class="QPushButton" name="btnInstall">
+            <item row="2" column="2">
+             <widget class="QPushButton" name="btnServices">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
@@ -364,31 +375,12 @@ QPushButton:hover {
                </size>
               </property>
               <property name="text">
-               <string>Установки</string>
+               <string>Сервисы</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
-             <widget class="QPushButton" name="btnDatetime">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>150</width>
-                <height>60</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Дата и время</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <spacer name="verticalSpacer">
+            <item row="4" column="3">
+             <spacer name="verticalSpacer_2">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
@@ -419,8 +411,8 @@ QPushButton:hover {
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
-             <widget class="QPushButton" name="btnMessages">
+            <item row="3" column="1">
+             <widget class="QPushButton" name="btnDatetime">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
@@ -434,7 +426,26 @@ QPushButton:hover {
                </size>
               </property>
               <property name="text">
-               <string>Сообщения</string>
+               <string>Дата и время</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QPushButton" name="btnUsers">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Пользователи</string>
               </property>
              </widget>
             </item>
@@ -476,8 +487,8 @@ QPushButton:hover {
               </property>
              </widget>
             </item>
-            <item row="3" column="2">
-             <widget class="QPushButton" name="btnUsers">
+            <item row="2" column="1">
+             <widget class="QPushButton" name="btnMessages">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
@@ -491,7 +502,26 @@ QPushButton:hover {
                </size>
               </property>
               <property name="text">
-               <string>Пользователи</string>
+               <string>Сообщения</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="3">
+             <widget class="QPushButton" name="btnInstall">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Установки</string>
               </property>
              </widget>
             </item>
@@ -514,25 +544,6 @@ QPushButton:hover {
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
-             <widget class="QPushButton" name="btnScreen">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>150</width>
-                <height>60</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Экран</string>
-              </property>
-             </widget>
-            </item>
             <item row="2" column="0">
              <widget class="QPushButton" name="btnState">
               <property name="sizePolicy">
@@ -552,8 +563,8 @@ QPushButton:hover {
               </property>
              </widget>
             </item>
-            <item row="4" column="3">
-             <spacer name="verticalSpacer_2">
+            <item row="0" column="0">
+             <spacer name="verticalSpacer">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
