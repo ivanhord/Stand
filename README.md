@@ -15,4 +15,18 @@
 Цветовое обозначение значений подпора:
 P, Бар
 P<0.5-желтый	3≤P≤6-белый	P>6-красный
+
+<layout class="QHBoxLayout" name="upperLayout">
+ <property name="stretch">
+  <string>2,1</string>
+ </property>
+ ...
+</layout>
+
+<layout class="QHBoxLayout" name="downLayout">
+ <property name="stretch">
+  <string>2,1</string>
+ </property>
+ ...
+</layout>
  	 	 
