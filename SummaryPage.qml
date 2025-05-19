@@ -4,9 +4,9 @@ import QtQuick.Layouts 1.15
 
 Rectangle {
     id: root
-    width: 800
-    height: 600
-    color: "#101010"
+    //width: 800
+    //height: 600
+    color: "#333"
 
     property real pressureOutput: 12.73
     property real pressureInput: 0.11
@@ -16,9 +16,11 @@ Rectangle {
     property bool dumpValveOpen: false
 
     ColumnLayout {
-        anchors.fill: parent
-        anchors.margins: 20
-        spacing: 16
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        //anchors.margins: 8
+        //spacing: 4
 
         SummaryRow {
             label: "Давление нагнетания, бар"
